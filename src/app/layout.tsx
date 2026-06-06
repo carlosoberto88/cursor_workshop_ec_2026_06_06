@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
+
+import { Header } from "@/components/marketlab/header";
+import { ThemeProvider } from "@/components/marketlab/theme-provider";
+import type { ThemePreference } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,17 +26,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+function readServerTheme(value: string | undefined): ThemePreference | null {
+  if (value === "light" || value === "dark") {
+    return value;
+  }
+
+  return null;
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const serverTheme = readServerTheme(cookieStore.get("theme")?.value);
+
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={cn(
+        geistSans.variable,
+        geistMono.variable,
+        "h-full antialiased",
+        serverTheme === "dark" && "dark",
+      )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <ThemeProvider serverTheme={serverTheme}>
+          <Header />
+          <div className="flex-1">{children}</div>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

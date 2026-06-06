@@ -152,3 +152,13 @@ create policy "ledger_entries_select_own"
   for select
   to authenticated
   using ((select auth.uid()) = user_id);
+
+-- ---------------------------------------------------------------------------
+-- API role grants (required for PostgREST / Supabase client access)
+-- ---------------------------------------------------------------------------
+
+grant select on table public.markets to anon, authenticated;
+
+grant select on table public.profiles to authenticated;
+grant select on table public.positions to authenticated;
+grant select on table public.ledger_entries to authenticated;

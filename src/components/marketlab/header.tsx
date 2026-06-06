@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { signOut } from "@/app/actions/auth";
@@ -20,30 +19,24 @@ export async function Header() {
   const authState = getHeaderAuthState({ user, profile });
 
   return (
-    <header className="border-b border-border bg-background text-foreground">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <header className="border-b border-border bg-background">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <div className="flex items-center gap-6">
-          <Link href="/" className="block shrink-0">
-            <Image
-              src="/logo/logo-marketlab.webp"
-              alt="MarketLab"
-              width={677}
-              height={369}
-              className="h-16 w-32 object-contain sm:h-20 sm:w-40"
-              priority
-            />
+          <Link
+            href="/markets"
+            className="text-lg font-semibold tracking-tight text-foreground"
+          >
+            MarketLab
           </Link>
-
-          <nav className="flex items-center gap-4 text-sm font-medium">
+          <nav>
             <Link
               href="/markets"
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Markets
             </Link>
           </nav>
         </div>
-
         <div className="flex flex-wrap items-center justify-end gap-3">
           {authState.showBalance ? (
             <BalanceBadge

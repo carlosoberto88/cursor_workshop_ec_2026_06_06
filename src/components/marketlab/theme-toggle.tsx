@@ -5,54 +5,38 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
-  getNextThemeMode,
-  resolveThemeClass,
-  THEME_STORAGE_KEY,
-  type ThemeMode,
+  applyTheme,
+  readStoredTheme,
+  readSystemTheme,
+  type ThemePreference,
 } from "@/lib/theme";
 
-function getInitialTheme(): ThemeMode {
-  if (typeof document === "undefined") {
-    return "light";
-  }
-
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-function applyTheme(mode: ThemeMode) {
-  const root = document.documentElement;
-  root.classList.remove("dark");
-
-  const themeClass = resolveThemeClass(mode);
-  if (themeClass) {
-    root.classList.add(themeClass);
-  }
-
-  try {
-    localStorage.setItem(THEME_STORAGE_KEY, mode);
-  } catch {
-    // Ignore storage failures in restricted environments.
-  }
+function readToggleTheme(): ThemePreference {
+  return readStoredTheme() ?? readSystemTheme();
 }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [theme, setTheme] = useState<ThemePreference>("light");
 
   useEffect(() => {
-    setTheme(getInitialTheme());
+    setTheme(readToggleTheme());
   }, []);
+
+  function toggleTheme() {
+    const next: ThemePreference = theme === "dark" ? "light" : "dark";
+    applyTheme(next);
+    setTheme(next);
+  }
 
   return (
     <Button
       type="button"
       variant="outline"
-      size="icon"
-      aria-label={`Switch to ${getNextThemeMode(theme)} mode`}
-      onClick={() => {
-        const nextTheme = getNextThemeMode(theme);
-        applyTheme(nextTheme);
-        setTheme(nextTheme);
-      }}
+      size="icon-sm"
+      onClick={toggleTheme}
+      aria-label={
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+      }
     >
       {theme === "dark" ? <Sun /> : <Moon />}
     </Button>

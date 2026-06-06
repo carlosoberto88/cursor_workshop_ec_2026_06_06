@@ -1,0 +1,1 @@
+-- Workshop seed placeholder

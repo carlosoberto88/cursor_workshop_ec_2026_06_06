@@ -28,12 +28,18 @@ export async function Header() {
           >
             MarketLab
           </Link>
-          <nav>
+          <nav className="flex items-center gap-4">
             <Link
               href="/markets"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Markets
+            </Link>
+            <Link
+              href="/positions"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              My Positions
             </Link>
           </nav>
         </div>

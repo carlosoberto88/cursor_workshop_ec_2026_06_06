@@ -6,6 +6,7 @@ import { Header } from "@/components/marketlab/header";
 import { ThemeProvider } from "@/components/marketlab/theme-provider";
 import type { ThemePreference } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+
 import "./globals.css";
 
 const geistSans = Geist({
